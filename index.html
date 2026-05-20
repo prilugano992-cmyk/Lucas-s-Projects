@@ -109,10 +109,9 @@
 
     <header>
         <h1>Lucas Prado Coelho</h1>
-        <p>Building operating systems, alternative interfaces, and tiny tools.</p>
+        <p>Terminal tools, alternative interfaces, and tiny experiments.</p>
         <div class="links">
             <a href="https://github.com/prilugano992-cmyk">GitHub</a>
-            <a href="#journey">Journey OS</a>
             <a href="#bang">Bang Desktop</a>
             <a href="#tiny">Really Small Projects</a>
         </div>
@@ -120,35 +119,15 @@
 
     <!-- Tabs -->
     <div class="tabs">
-        <button class="tab active" onclick="openProject('journey')">Journey OS</button>
-        <button class="tab" onclick="openProject('bang')">Bang Desktop</button>
+        <button class="tab active" onclick="openProject('bang')">Bang Desktop</button>
         <button class="tab" onclick="openProject('tiny')">Really Small Projects</button>
     </div>
 
-    <!-- ==================== JOURNEY OS ==================== -->
-    <div id="journey" class="project-panel active">
-        <div class="card">
-            <h2>Journey OS <span class="badge">PRE-ALPHA</span></h2>
-            <p style="margin-bottom:1rem;">A mobile operating system built from scratch. Not a fork. Not a skin. A new core.</p>
-            <table style="width:100%; border-collapse: collapse;">
-                <tr><td style="color:#8b949e; padding:0.3rem 0;">Kernel</td><td>Linux 6.6.16 LTS (x86_64) · Compiled manually from source</td></tr>
-                <tr><td style="color:#8b949e;">Current milestone</td><td style="color:var(--green);">✅ Graphical milestone: DRM/KMS pipeline validated (kmscube running). Foot terminal running inside Weston.</td></tr>
-                <tr><td style="color:#8b949e;">Initramfs</td><td>✅ BusyBox static · Boots to shell</td></tr>
-                <tr><td style="color:#8b949e;">License</td><td>GPL v3</td></tr>
-            </table>
-        </div>
-        <div class="card">
-            <h3>Status</h3>
-            <p>The kernel compiles and boots under QEMU; the graphical interface is still being integrated due to QEMU limitations with Wayland compositors. Bang Desktop development serves as a laboratory for the future Journey OS UI.</p>
-            <p style="margin-top:1rem;">🔗 <a href="https://prilugano992-cmyk.github.io/Journey-OS/">Journey OS status page</a></p>
-        </div>
-    </div>
-
     <!-- ==================== BANG DESKTOP ==================== -->
-    <div id="bang" class="project-panel">
+    <div id="bang" class="project-panel active">
         <div class="card">
             <h2>Bang Desktop <span class="badge" style="background:#9c6ade;">OPEN SOURCE</span></h2>
-            <p>A terminal-based visual environment written in C with ncurses. It combines movable windows, a desktop with icons, and file editing via <code>vi</code>/<code>nano</code>. It is the proof of concept for the hybrid interface (terminal + GUI) envisioned for Journey OS.</p>
+            <p>A terminal-based visual environment written in C with ncurses. It combines movable windows, a desktop with icons, and file editing via <code>vi</code>/<code>nano</code>. It is the proof of concept for a hybrid interface (terminal + GUI).</p>
             <p style="margin-top:0.5rem; color:#8b949e;">MIT License · Fully open source for study, modification, and distribution.</p>
         </div>
 
@@ -542,10 +521,20 @@ int main() {
 
 <script>
     function openProject(name) {
-        document.querySelectorAll('.project-panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(name).classList.add('active');
-        event.target.classList.add('active');
+        // Esconde todos os painéis
+        document.querySelectorAll('.project-panel').forEach(p => {
+            p.classList.remove('active');
+        });
+        // Remove 'active' de todas as abas
+        document.querySelectorAll('.tab').forEach(t => {
+            t.classList.remove('active');
+        });
+        // Mostra o painel escolhido
+        const panel = document.getElementById(name);
+        if (panel) panel.classList.add('active');
+        // Ativa a aba correspondente
+        const activeTab = document.querySelector(`.tab[onclick*="${name}"]`);
+        if (activeTab) activeTab.classList.add('active');
     }
 </script>
 </body>
