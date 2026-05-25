@@ -183,7 +183,7 @@ void ata_read_sector(unsigned int lba, unsigned short* buffer) {
 }
 
 // Redraws desktop, rounded windows, and clocks on top of the double buffer
-void redraw_screen(unsigned int* fb, int screen_width, int screen_height, int win_open, int mouse_x, int mouse_y) {
+void redraw_screen(unsigned int* fb, int screen_width, int screen_height, int win_open, int st_menu_open, int mouse_x, int mouse_y) {
     draw_desktop_background(screen_width, screen_height, aero_color_mode);
     
     for (int i = 0; i < 4; i++) {
@@ -219,7 +219,319 @@ void redraw_screen(unsigned int* fb, int screen_width, int screen_height, int wi
             <pre><code>#include &lt;ncurses.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
-// ... (código truncado para legibilidade)
+#include &lt;time.h&gt;
+#include &lt;dirent.h&gt;
+#include &lt;unistd.h&gt;
+
+#define MAX_WINDOWS 20
+#define MAX_ICONS 50
+#define MAX_OUTPUT 2048
+#define INPUT_MAX 128
+
+typedef struct {
+    int y, x, w, h;
+    char title[64];
+    char content[MAX_OUTPUT];
+    int active;
+    int focused;
+} Window;
+
+typedef struct {
+    char name[64];
+    int y, x;
+    int is_dir;
+} DesktopIcon;
+
+Window windows[MAX_WINDOWS];
+int window_count = 0;
+DesktopIcon icons[MAX_ICONS];
+int icon_count = 0;
+char input[INPUT_MAX] = "";
+int max_y, max_x;
+int desktop_mode = 0;
+int selected_icon = 0;
+
+enum { C_TASKBAR = 1, C_WIN_BODY, C_WIN_FOCUS, C_ERROR, C_DESKTOP_ICON, C_SELECTED_ICON };
+
+void init_ui() {
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    curs_set(1);
+    start_color();
+    use_default_colors();
+    init_pair(C_TASKBAR, COLOR_WHITE, COLOR_BLUE);
+    init_pair(C_WIN_BODY, COLOR_WHITE, COLOR_CYAN);
+    init_pair(C_WIN_FOCUS, COLOR_YELLOW, COLOR_CYAN);
+    init_pair(C_ERROR, COLOR_RED, COLOR_CYAN);
+    init_pair(C_DESKTOP_ICON, COLOR_WHITE, COLOR_BLACK);
+    init_pair(C_SELECTED_ICON, COLOR_BLACK, COLOR_WHITE);
+    getmaxyx(stdscr, max_y, max_x);
+}
+
+void update_desktop() {
+    DIR *d = opendir(".");
+    if (!d) return;
+    icon_count = 0;
+    struct dirent *entry;
+    int row = 1, col = 2;
+    while ((entry = readdir(d)) != NULL && icon_count &lt; MAX_ICONS) {
+        if (entry-&gt;d_name[0] == '.') continue;
+        strncpy(icons[icon_count].name, entry-&gt;d_name, 63);
+        icons[icon_count].y = row;
+        icons[icon_count].x = col;
+        icons[icon_count].is_dir = (entry-&gt;d_type == DT_DIR) ? 1 : 0;
+        icon_count++;
+        row += 3;
+        if (row &gt; max_y - 5) { row = 1; col += 20; }
+    }
+    closedir(d);
+    if (selected_icon &gt;= icon_count) selected_icon = 0;
+}
+
+void redraw_desktop() {
+    bkgd(COLOR_BLACK);
+    erase();
+    for (int i = 0; i &lt; icon_count; i++) {
+        int pair = (desktop_mode && i == selected_icon) ? C_SELECTED_ICON : C_DESKTOP_ICON;
+        attron(COLOR_PAIR(pair));
+        if (icons[i].is_dir)
+            mvprintw(icons[i].y, icons[i].x, "[D] %-20s", icons[i].name);
+        else
+            mvprintw(icons[i].y, icons[i].x, "[ ] %-20s", icons[i].name);
+        mvprintw(icons[i].y + 1, icons[i].x, "------");
+        attroff(COLOR_PAIR(pair));
+    }
+}
+
+void draw_taskbar() {
+    attron(COLOR_PAIR(C_TASKBAR));
+    for (int x = 0; x &lt; max_x; x++) mvprintw(max_y - 1, x, " ");
+    mvprintw(max_y - 1, 1, " Bang Desktop ");
+    time_t now = time(NULL);
+    char tstr[10];
+    strftime(tstr, sizeof(tstr), "%H:%M", localtime(&amp;now));
+    mvprintw(max_y - 1, max_x - 8, " %s ", tstr);
+    if (desktop_mode) {
+        attron(COLOR_PAIR(C_ERROR));
+        mvprintw(max_y - 1, 20, "[EDIT MODE]");
+        attroff(COLOR_PAIR(C_ERROR));
+    }
+    attroff(COLOR_PAIR(C_TASKBAR));
+}
+
+void draw_text_in_window(Window *win, int color_pair) {
+    int max_text_width = win-&gt;w - 4;
+    int line = 0;
+    char *text = win-&gt;content;
+    int len = strlen(text);
+    int pos = 0;
+    while (pos &lt; len && line &lt; win-&gt;h - 3) {
+        int chunk_size = len - pos;
+        if (chunk_size &gt; max_text_width) chunk_size = max_text_width;
+        char chunk[512];
+        strncpy(chunk, text + pos, chunk_size);
+        chunk[chunk_size] = '\0';
+        char *newline = strchr(chunk, '\n');
+        if (newline) {
+            *newline = '\0';
+            chunk_size = newline - chunk;
+        }
+        attron(COLOR_PAIR(color_pair));
+        mvprintw(win-&gt;y + 2 + line, win-&gt;x + 2, "%-*s", max_text_width, chunk);
+        attroff(COLOR_PAIR(color_pair));
+        pos += chunk_size;
+        if (text[pos] == '\n') pos++;
+        line++;
+    }
+}
+
+void draw_windows() {
+    for (int i = 0; i &lt; window_count; i++) {
+        Window *w = &amp;windows[i];
+        if (!w-&gt;active) continue;
+        int pair = w-&gt;focused ? C_WIN_FOCUS : C_WIN_BODY;
+        attron(COLOR_PAIR(pair));
+        for (int row = 0; row &lt; w-&gt;h; row++)
+            for (int col = 0; col &lt; w-&gt;w; col++)
+                mvaddch(w-&gt;y + row, w-&gt;x + col, ' ');
+        attroff(COLOR_PAIR(pair));
+        attron(COLOR_PAIR(C_TASKBAR) | A_BOLD);
+        mvprintw(w-&gt;y, w-&gt;x, " %-*s ", w-&gt;w - 2, w-&gt;title);
+        attroff(COLOR_PAIR(C_TASKBAR) | A_BOLD);
+        draw_text_in_window(w, pair);
+        border(0, 0, 0, 0, 0, 0, 0, 0);
+    }
+}
+
+void draw_input() {
+    if (desktop_mode) {
+        attron(COLOR_PAIR(C_TASKBAR));
+        mvprintw(max_y - 2, 0, "[ENTER] Edit  [ESC] Exit  [ARROWS] Navigate");
+        attroff(COLOR_PAIR(C_TASKBAR));
+    } else {
+        attron(COLOR_PAIR(C_TASKBAR));
+        mvprintw(max_y - 2, 0, "&gt; %s", input);
+        attroff(COLOR_PAIR(C_TASKBAR));
+    }
+}
+
+void add_window(const char *title, const char *content, int is_error) {
+    if (window_count &gt;= MAX_WINDOWS) return;
+    Window *w = &amp;windows[window_count++];
+    w-&gt;y = 3 + (window_count * 2) % 10;
+    w-&gt;x = 5 + (window_count * 3) % 20;
+    w-&gt;w = 50;
+    w-&gt;h = 8;
+    w-&gt;active = 1;
+    w-&gt;focused = 0;
+    strncpy(w-&gt;title, is_error ? "Error" : "Output", 63);
+    strncat(w-&gt;title, ": ", 63);
+    strncat(w-&gt;title, title, 63);
+    strncpy(w-&gt;content, content, MAX_OUTPUT - 1);
+    if (window_count == 1) w-&gt;focused = 1;
+}
+
+void open_editor(const char *filename) {
+    int has_nano = (system("which nano &gt; /dev/null 2&gt;&amp;1") == 0);
+    int has_vi   = (system("which vi &gt; /dev/null 2&gt;&amp;1") == 0);
+    char cmd[512];
+    endwin();
+    if (has_nano) {
+        snprintf(cmd, sizeof(cmd), "nano %s", filename);
+        system(cmd);
+    } else if (has_vi) {
+        snprintf(cmd, sizeof(cmd), "vi %s", filename);
+        system(cmd);
+    } else {
+        refresh();
+        add_window("Edit", "No editor (nano/vi) found.", 1);
+    }
+    refresh();
+    clear();
+}
+
+void execute_command(const char *cmd) {
+    if (strncmp(cmd, "edit ", 5) == 0) {
+        const char *filename = cmd + 5;
+        open_editor(filename);
+        update_desktop();
+        return;
+    }
+    char buffer[MAX_OUTPUT] = "";
+    FILE *fp = popen(cmd, "r");
+    if (!fp) {
+        add_window(cmd, "Failed to execute command.", 1);
+        return;
+    }
+    size_t len = 0;
+    while (fgets(buffer + len, sizeof(buffer) - len, fp)) {
+        len = strlen(buffer);
+        if (len &gt;= MAX_OUTPUT - 10) break;
+    }
+    int status = pclose(fp);
+    if (status == 0 && strlen(buffer) == 0)
+        strcpy(buffer, "Command executed successfully.");
+    add_window(cmd, buffer, status != 0);
+    update_desktop();
+}
+
+void focus_next() {
+    if (window_count == 0) return;
+    int cur = -1;
+    for (int i = 0; i &lt; window_count; i++) if (windows[i].focused) cur = i;
+    if (cur != -1) windows[cur].focused = 0;
+    for (int i = 1; i &lt;= window_count; i++) {
+        int idx = (cur + i) % window_count;
+        if (windows[idx].active) { windows[idx].focused = 1; return; }
+    }
+    windows[0].focused = 1;
+}
+
+void close_focused() {
+    for (int i = 0; i &lt; window_count; i++) {
+        if (windows[i].focused) { windows[i].active = 0; windows[i].focused = 0; break; }
+    }
+    focus_next();
+}
+
+void move_focused(int dy, int dx) {
+    for (int i = 0; i &lt; window_count; i++) {
+        if (windows[i].focused && windows[i].active) {
+            int ny = windows[i].y + dy;
+            int nx = windows[i].x + dx;
+            if (ny &gt;= 1 && ny + windows[i].h &lt; max_y - 2) windows[i].y = ny;
+            if (nx &gt;= 1 && nx + windows[i].w &lt; max_x - 2) windows[i].x = nx;
+            return;
+        }
+    }
+}
+
+int main() {
+    init_ui();
+    update_desktop();
+
+    while (1) {
+        redraw_desktop();
+        draw_windows();
+        draw_taskbar();
+        draw_input();
+        refresh();
+
+        int ch = getch();
+
+        if (desktop_mode) {
+            switch (ch) {
+                case KEY_UP:    if (selected_icon &gt; 0) selected_icon--; break;
+                case KEY_DOWN:  if (selected_icon &lt; icon_count - 1) selected_icon++; break;
+                case KEY_LEFT:  if (selected_icon &gt; 0) selected_icon--; break;
+                case KEY_RIGHT: if (selected_icon &lt; icon_count - 1) selected_icon++; break;
+                case '\n':
+                    if (!icons[selected_icon].is_dir) {
+                        open_editor(icons[selected_icon].name);
+                        update_desktop();
+                    }
+                    break;
+                case 27:
+                case 'q':
+                case 'Q':
+                    desktop_mode = 0;
+                    break;
+            }
+            continue;
+        }
+
+        if (ch == '#') {
+            desktop_mode = 1;
+            selected_icon = 0;
+            continue;
+        } else if (ch == '\n') {
+            if (strcmp(input, "exit") == 0) break;
+            if (strcmp(input, "clear") == 0) {
+                window_count = 0;
+                update_desktop();
+            } else if (strlen(input) &gt; 0) execute_command(input);
+            input[0] = '\0';
+        } else if (ch == 127 || ch == KEY_BACKSPACE) {
+            int len = strlen(input);
+            if (len &gt; 0) input[len - 1] = '\0';
+        } else if (ch == '\t') focus_next();
+        else if (ch == KEY_DC) close_focused();
+        else if (ch == KEY_UP) move_focused(-1, 0);
+        else if (ch == KEY_DOWN) move_focused(1, 0);
+        else if (ch == KEY_LEFT) move_focused(0, -1);
+        else if (ch == KEY_RIGHT) move_focused(0, 1);
+        else if (ch &gt;= 32 && ch &lt; 127 && strlen(input) &lt; 127) {
+            int len = strlen(input);
+            input[len] = (char)ch;
+            input[len + 1] = '\0';
+        }
+    }
+
+    endwin();
+    return 0;
+}
 </code></pre>
             <p class="license">MIT License — Copyright (c) 2026 Lucas Prado Coelho</p>
         </div>
@@ -239,14 +551,54 @@ void redraw_screen(unsigned int* fb, int screen_width, int screen_height, int wi
             <pre><code>while ($true) {
     $query = Read-Host "Search For a Term (or 'Exit')"
     if ($query -eq "exit") { break }
-    // ... (código truncado para legibilidade)
+
+    Write-Host "`nSearching For '$query'..." -ForegroundColor Cyan
+
+    try {
+        $encodedQuery = [uri]::EscapeDataString($query)
+        # Uses REST API v1 to get the main page summary
+        $url = "https://en.wikipedia.org/api/rest_v1/page/summary/$encodedQuery"
+        $response = Invoke-RestMethod -Uri $url -Method Get -ErrorAction Stop
+
+        Write-Host "`n===== RESULT =====" -ForegroundColor Green
+        Write-Host "`n--- $($response.title) ---" -ForegroundColor Yellow
+        Write-Host $response.extract
+        Write-Host "`n====================="
+    }
+    catch {
+        # If it fails (e.g., page not found), try opensearch and pick the first result
+        try {
+            $urlSearch = "https://en.wikipedia.org/w/api.php?action=opensearch&amp;format=json&amp;search=$encodedQuery&amp;limit=1"
+            $searchResponse = Invoke-RestMethod -Uri $urlSearch -Method Get
+            $firstResult = $searchResponse[1][0]
+            if ($firstResult) {
+                $encodedFirst = [uri]::EscapeDataString($firstResult)
+                $urlSummary = "https://en.wikipedia.org/api/rest_v1/page/summary/$encodedFirst"
+                $summary = Invoke-RestMethod -Uri $urlSummary -Method Get -ErrorAction SilentlyContinue
+                if ($summary) {
+                    Write-Host "`nClosest Term: $firstResult" -ForegroundColor Magenta
+                    Write-Host "`n===== RESULT =====" -ForegroundColor Green
+                    Write-Host "`n--- $($summary.title) ---" -ForegroundColor Yellow
+                    Write-Host $summary.extract
+                    Write-Host "`n====================="
+                } else {
+                    Write-Host "Nothing Found." -ForegroundColor Red
+                }
+            } else {
+                Write-Host "Nothing Found." -ForegroundColor Red
+            }
+        }
+        catch {
+            Write-Host "Error to ask API: $_" -ForegroundColor Red
+        }
+    }
 }
 </code></pre>
         </div>
     </div>
 
     <div class="footer">
-        © 2026 Lucas Prado Coelho
+        © 2026 Lucas Prado Coelho · Built with C, GNU toolchain, PowerShell and endless curiosity.
     </div>
 </div>
 
