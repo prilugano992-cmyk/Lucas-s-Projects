@@ -4,6 +4,18 @@ Welcome to my personal projects repository! Here you will find a collection of o
 
 ---
 
+## ℹ️ Sincere Disclosure & Author's Note
+
+Hi there! My name is **Lucas**, and I am **12 years old**. 
+
+I am deeply fascinated by low-level computer science, operating systems, and how hardware works. Because I am still learning the fundamentals of software engineering and do not have formal training, **I use AI (such as ChatGPT and DeepSeek) as my low-level programming tutor** and code-structuring assistant to help me bring my ideas to life.
+
+While I am actively studying and learning how to write C, Assembly, and build systems, many of the complex hardware drivers and structures in these repositories were generated or organized with the help of AI under my direction. 
+
+My goal is to learn and build cool things, not to deceive anyone. I hope you enjoy exploring my projects, and I welcome any constructive feedback, low-level advice, or mentoring!
+
+---
+
 ## 💻 Featured Project: GenesisOS
 
 **GenesisOS** is a lightweight, 32-bit x86 graphical operating system built from scratch (bare-metal) natively on Windows. It combines modern desktop concepts, like modular movable docks and dynamic layout snapping, with nostalgia-inducing design aesthetics inspired by the early 2000s (Frutiger Aero / Windows XP Bliss).
