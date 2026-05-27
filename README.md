@@ -85,4 +85,4 @@ Open PowerShell inside the project directory and execute:
 
 These projects are open-source and licensed under the **MIT License**. Feel free to use, modify, and distribute the code for study and educational purposes.
 
-© 2026 Lucas Prado Coelho. Built with C, GNU toolchain, PowerShell and endless curiosity.
+© 2026 LucasPR. Built with C, GNU toolchain, PowerShell and endless curiosity.
