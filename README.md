@@ -55,51 +55,7 @@ mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-in
 
 ---
 
-## 🖥️ Bang Desktop
-
-A terminal-based visual desktop environment written in C using the **ncurses** library. It combines movable window panels, a simulated desktop grid with file icons, and native terminal text editing (vi/nano), serving as a proof-of-concept for hybrid text-graphics user interfaces.
-
-### 🚀 How to Run
-Make sure you have the `ncurses` development library installed on your system:
-
-```bash
-# Compile
-gcc bang_desktop.c -o bang_desktop -lncurses
-
-# Run
-./bang_desktop
-```
-
-*   **Keyboard Controls:** 
-    *   `TAB` - Switch focus between windows.
-    *   `Arrow Keys` - Move the focused window or navigate desktop icons.
-    *   `DEL` - Close the active window.
-    *   `#` - Enter/Exit Desktop Mode.
-
----
-
-## 🔍 WikiSearch
-
-A terminal-based Wikipedia browser written in **PowerShell**. It interfaces with Wikipedia's official REST API to download and display summarized definitions of search queries instantly on the terminal. If an exact term isn't found, it automatically performs an opensearch to find the nearest match.
-
-### 🚀 How to Run (Windows)
-Open PowerShell inside the project directory and execute:
-
-```powershell
-# Run script
-.\wikisearch.ps1
-```
-
----
-
-## 🧰 Languages and Technologies Used
-
-*   **Languages:** C, x86 Assembly (NASM), PowerShell
-*   **Libraries:** ncurses
-*   **Emulators & Virtualization:** QEMU
-*   **Compilers:** GCC cross-compiler (`i686-elf-gcc`)
-
----
+Check the Page for more Projects!
 
 ## 📜 License
 
