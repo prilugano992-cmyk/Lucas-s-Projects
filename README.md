@@ -34,8 +34,11 @@ qemu-system-i386 -cdrom genesis.iso -drive file=disk.img,format=raw,index=0,medi
 
 ### 🔓 How to Compile and Make your Own OS with GenesisOS:
 The Source Code for Genesis is at the latest release, download the file "GenesisOSSource.zip" and Extract It.
+
 When You're done Making Changes and want to Test it out, Execute "compile.ps1" and QEMU will open. (If you Have QEMU, Obviously.)
+
 Now, to Generate the ISO, Execute the following Command inside the "GenesisOS Source" Folder:
+
 ```bash
 mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o genesis.iso iso
 ```
