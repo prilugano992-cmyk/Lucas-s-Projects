@@ -1,4 +1,4 @@
-// kernel.c - Genesis OS com animações suaves, barra de tarefas e docks interativos
+// kernel.c - Genesis OS
 
 #define WHITE_ON_BLACK 0x07
 
@@ -500,7 +500,7 @@ void draw_desktop_background(int w, int h, int mode) {
     else draw_cyber_gradient(w, h);
 }
 
-// Barra de tarefas superior com indicadores de Notepad e Paint
+// Barra de tarefas superior
 void draw_top_taskbar(int w, int mode) {
     unsigned int bg = 0x0E5E80;
     if (mode == 1) bg = 0x2471A3;
@@ -741,8 +741,7 @@ void redraw_screen(unsigned int* fb, int screen_width, int screen_height, int wi
         frame_counter = 0;
         read_rtc(&current_hour, &current_minute, &current_second);
     }
-
-    // Animações suaves: interpolação do menu iniciar
+    
     if (start_menu_open && start_menu_height < 170) {
         start_menu_height += (170 - start_menu_height) / 3 + 2;
         if (start_menu_height > 170) start_menu_height = 170;
@@ -751,7 +750,6 @@ void redraw_screen(unsigned int* fb, int screen_width, int screen_height, int wi
         if (start_menu_height < 0) start_menu_height = 0;
     }
 
-    // Easing magnético dos docks
     for (int i = 0; i < 4; i++) {
         if (docks[i].active && !is_dragging_dock) {
             if (docks[i].y > 660 && docks[i].y != 700) {
@@ -834,7 +832,7 @@ void kernel_main(multiboot_info_t* mbi) {
     unsigned int* framebuffer = (unsigned int*)0xFD000000;
     init_mouse();
 
-    // Inicialização do sistema de arquivos (inalterado)
+    // Inicialização do sistema de arquivos
     unsigned short sector_buffer[256] = {0};
     ata_read_sector(1, sector_buffer);
     GfsFileEntry* hd_vfs = (GfsFileEntry*)sector_buffer;
@@ -927,14 +925,14 @@ void kernel_main(multiboot_info_t* mbi) {
                                     }
                                 }
                             }
-                            // Aplica movimento (correto: Y -= delta_y)
+                            // Aplica movimento
                             if (is_dragging_window) { window_x += delta_x; window_y -= delta_y; if (window_y < taskbar_height) window_y = taskbar_height; }
                             else if (is_dragging_file_window) { file_window_x += delta_x; file_window_y -= delta_y; if (file_window_y < taskbar_height) file_window_y = taskbar_height; }
                             else if (is_dragging_notepad) { notepad_x += delta_x; notepad_y -= delta_y; if (notepad_y < taskbar_height) notepad_y = taskbar_height; }
                             else if (is_dragging_paint) { paint_x += delta_x; paint_y -= delta_y; if (paint_y < taskbar_height) paint_y = taskbar_height; }
                             else if (is_dragging_dock && dragged_dock_index != -1) {
                                 docks[dragged_dock_index].x += delta_x;
-                                docks[dragged_dock_index].y -= delta_y;   // <-- Y correto
+                                docks[dragged_dock_index].y -= delta_y;
                             }
                         } else {
                             is_dragging_window = is_dragging_file_window = is_dragging_notepad = is_dragging_paint = is_dragging_dock = 0;
@@ -953,7 +951,7 @@ void kernel_main(multiboot_info_t* mbi) {
                             }
                         }
 
-                        // Atualiza posição do mouse (correto: mouse_y -= delta_y)
+                        // Atualiza posição do mouse
                         mouse_x += delta_x;
                         mouse_y -= delta_y;
                         if (mouse_x < 0) mouse_x = 0;
