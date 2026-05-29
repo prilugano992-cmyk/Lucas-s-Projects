@@ -1,0 +1,1 @@
+qemu-system-i386 -kernel genesis_kernel.bin -initrd initrd.tar -drive file=disk.img,format=raw,index=0,media=disk

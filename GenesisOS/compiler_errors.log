@@ -1,0 +1,8 @@
+kernel.c: In function 'redraw_screen':
+kernel.c:737:93: warning: unused parameter 'st_menu_open' [-Wunused-parameter]
+  737 | void redraw_screen(unsigned int* fb, int screen_width, int screen_height, int win_open, int st_menu_open, int mouse_x, int mouse_y) {
+      |                                                                                         ~~~~^~~~~~~~~~~~
+kernel.c: In function 'kernel_main':
+kernel.c:892:9: warning: unused variable 'last_second' [-Wunused-variable]
+  892 |     int last_second = -1;
+      |         ^~~~~~~~~~~
