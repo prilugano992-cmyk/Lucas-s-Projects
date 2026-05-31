@@ -34,9 +34,9 @@ qemu-system-i386 -cdrom genesis.iso -drive file=empty.img,format=raw -boot d
 ---
 
 ### 🔓 How to Compile and Make your Own OS with GenesisOS:
-The Source Code for Genesis is at Git.
+The Source Code for Genesis is at the Latest GenesisOS Release, Download "GenesisOSSource.zip" and Extract.
 
-When You're done Making Changes and want to Test it out, Execute "compile.ps1" and QEMU will open. (If you Have QEMU, Obviously.)
+When You're done Making Changes and want to Test it out, Execute "compile.ps1" and QEMU will open. (If you Have QEMU.)
 
 Now, to Generate the ISO, Execute the following Command inside the "GenesisOS" Folder:
 
