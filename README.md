@@ -27,7 +27,8 @@ You don't need to compile anything to try it! You can download the pre-compiled,
 
 To run it via QEMU on Windows:
 ```bash
-qemu-system-i386 -cdrom genesis.iso -drive file=disk.img,format=raw,index=0,media=disk
+qemu-img create -f raw empty.img 1M
+qemu-system-i386 -cdrom genesis.iso -drive file=empty.img,format=raw -boot d
 ```
 
 ---
