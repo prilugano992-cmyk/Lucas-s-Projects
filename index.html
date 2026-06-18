@@ -136,18 +136,18 @@
             <a href="https://github.com/prilugano992-cmyk">GitHub</a>
             <a href="#genesis">GenesisOS</a>
             <a href="#sweetie">Sweetie Assistant</a>
+            <a href="#cleanair">CleanAir Browser</a>
             <a href="#tiny">Really Small Projects</a>
         </div>
     </header>
 
-    <!-- Tabs -->
     <div class="tabs">
         <button class="tab active" onclick="openProject('genesis')">GenesisOS</button>
         <button class="tab" onclick="openProject('sweetie')">Sweetie Assistant</button>
+        <button class="tab" onclick="openProject('cleanair')">CleanAir Browser</button>
         <button class="tab" onclick="openProject('tiny')">Really Small Projects</button>
     </div>
 
-    <!-- ==================== GENESIS OS ==================== -->
     <div id="genesis" class="project-panel active">
         <div class="card">
             <h2>GenesisOS <span class="badge" style="background:#58a6ff;">BARE METAL OS</span></h2>
@@ -206,57 +206,52 @@ void redraw_screen(unsigned int* fb, int screen_width, int screen_height, int wi
         </div>
     </div>
 
-    <!-- ==================== SWEETIE ASSISTANT ==================== -->
-<div id="sweetie" class="project-panel">
+    <div id="sweetie" class="project-panel">
+        <div class="card">
+            <h2>
+                Sweetie Assistant
+                <span class="badge" style="background:#ff69b4;">
+                    DESKTOP PET
+                </span>
+            </h2>
 
-    <div class="card">
-        <h2>
-            Sweetie Assistant
-            <span class="badge" style="background:#ff69b4;">
-                DESKTOP PET
-            </span>
-        </h2>
+            <p>
+                Sweetie Assistant is a desktop companion built with Python and
+                PyQt6. It lives on the user's desktop as a mascot,
+                capable of reacting to application launches, displaying animated
+                speech bubbles, searching Wikipedia, telling jokes, reporting
+                system information, and interacting through a contextual menu.
+            </p>
 
-        <p>
-            Sweetie Assistant is a desktop companion built with Python and
-            PyQt6. It lives on the user's desktop as a mascot,
-            capable of reacting to application launches, displaying animated
-            speech bubbles, searching Wikipedia, telling jokes, reporting
-            system information, and interacting through a contextual menu.
-        </p>
+            <p style="margin-top:1rem; color:#8b949e;">
+                Python · PyQt6 · Requests · Psutil
+            </p>
 
-        <p style="margin-top:1rem; color:#8b949e;">
-            Python · PyQt6 · Requests · Psutil
-        </p>
+            <a href="https://github.com/prilugano992-cmyk/Lucas-s-Projects/releases/download/sweetie-v1.0.0/SweetieAssistant.exe"
+               class="btn-download"
+               download>
+                Download Sweetie Assistant
+            </a>
+        </div>
 
-        <a href="https://github.com/prilugano992-cmyk/Lucas-s-Projects/releases/download/sweetie-v1.0.0/SweetieAssistant.exe"
-           class="btn-download"
-           download>
-            Download Sweetie Assistant
-        </a>
-    </div>
+        <div class="card">
+            <h3>Features</h3>
+            <ul style="padding-left:20px;">
+                <li>Transparent desktop mascot</li>
+                <li>Always-on-top companion</li>
+                <li>Animated typewriter dialogue</li>
+                <li>Wikipedia integration</li>
+                <li>Application launch detection</li>
+                <li>System information utility</li>
+                <li>Random jokes and facts</li>
+                <li>Interactive context menu</li>
+                <li>Built with Python and PyQt6</li>
+            </ul>
+        </div>
 
-    <div class="card">
-        <h3>Features</h3>
-
-        <ul style="padding-left:20px;">
-            <li>Transparent desktop mascot</li>
-            <li>Always-on-top companion</li>
-            <li>Animated typewriter dialogue</li>
-            <li>Wikipedia integration</li>
-            <li>Application launch detection</li>
-            <li>System information utility</li>
-            <li>Random jokes and facts</li>
-            <li>Interactive context menu</li>
-            <li>Built with Python and PyQt6</li>
-        </ul>
-    </div>
-
-    <div class="card">
-        <h3>Wikipedia Search Example</h3>
-
+        <div class="card">
+            <h3>Wikipedia Search Example</h3>
 <pre><code>def wikipedia_search(self):
-
     text, ok = QInputDialog.getText(
         self,
         "Wikipedia Search",
@@ -293,16 +288,35 @@ void redraw_screen(unsigned int* fb, int screen_width, int screen_height, int wi
 
     self.say(summary["extract"][:350])
 </code></pre>
-
-        <p class="license">
-            MIT License — Copyright (c) 2026 Lucas Prado Coelho
-        </p>
-
+            <p class="license">
+                MIT License — Copyright (c) 2026 Lucas Prado Coelho
+            </p>
+        </div>
     </div>
 
-</div>
+    <div id="cleanair" class="project-panel">
+        <div class="card">
+            <h2>CleanAir Browser <span class="badge" style="background:#2ecc71;">HOBBY PROJECT</span></h2>
+            <p>A simple, lightweight web browser built as a hobby project. Focused on a clean, distraction-free environment and standard rendering without resource bloating. Perfect for testing web view implementations and light daily browsing experiments.</p>
+            
+            <a href="https://github.com/prilugano992-cmyk/Lucas-s-Projects/releases/download/cleanair-v1.0.0/CleanAir.exe" class="btn-download" download>
+                Download CleanAir Browser
+            </a>
+            
+            <p style="margin-top:1rem; color:#8b949e;">Hobby Project · Desktop Windows Application.</p>
+        </div>
+        
+        <div class="card">
+            <h3>Features</h3>
+            <ul style="padding-left:20px;">
+                <li>Minimalist user interface</li>
+                <li>Lightweight</li>
+                <li>No telemetry or tracking components</li>
+                <li>Dedicated to experimental features and custom UI components</li>
+            </ul>
+        </div>
+    </div>
 
-    <!-- ==================== REALLY SMALL PROJECTS ==================== -->
     <div id="tiny" class="project-panel">
         <div class="card">
             <h2>Really Small Projects <span class="badge" style="background:#c9510c;">Micro</span></h2>
