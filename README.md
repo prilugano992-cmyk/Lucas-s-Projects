@@ -16,49 +16,6 @@ My goal is to learn and build cool things, not to deceive anyone. I hope you enj
 
 ---
 
-## 💻 Featured Project: GenesisOS
-
-**GenesisOS** is a lightweight, 32-bit x86 graphical operating system built from scratch (bare-metal) natively on Windows. It combines modern desktop concepts, like modular movable docks and dynamic layout snapping, with nostalgia-inducing design aesthetics inspired by the early 2000s (Frutiger Aero / Windows XP Bliss).
-
-### 📀 Quick Start: Booting the ISO
-You don't need to compile anything to try it! You can download the pre-compiled, bootable ISO image and run it on any emulator (like VirtualBox or VMware), or run it directly on QEMU:
-
-👉 **[Download GenesisOS Bootable ISO](https://github.com/prilugano992-cmyk/Lucas-s-Projects/releases/download/v1.0.0/genesis.iso)**
-
-To run it via QEMU on Windows:
-```bash
-qemu-img create -f raw empty.img 1M
-qemu-system-i386 -cdrom genesis.iso -drive file=empty.img,format=raw -boot d
-```
-
----
-
-### 🔓 How to Compile and Make your Own OS with GenesisOS:
-The Source Code for Genesis is at the Latest GenesisOS Release, Download "GenesisOSSource.zip" and Extract.
-
-When You're done Making Changes and want to Test it out, Execute "compile.ps1" and QEMU will open. (If you Have QEMU.)
-
-Now, to Generate the ISO, Execute the following Command inside the "GenesisOS" Folder:
-
-```bash
-mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o genesis.iso iso
-```
-
-### 🛠️ Key Technical Features of GenesisOS:
-
-*   **Custom ATA IDE Hard Disk Driver:** Reads and writes raw disk sectors over the primary master IDE channel in LBA28 PIO mode.
-*   **GenesisOS File System (GFS):** A persistent custom file system implemented on Sector 1 of the virtual hard drive (`disk.img`), supporting dynamic sub-directory navigation, file renaming, creation, and deletion.
-*   **Double Buffering:** Draws everything (background, windows, docks, mouse) into an invisible 3MB RAM buffer (`backbuffer`) and copies it to the actual screen at once, eliminating flickering.
-*   **Bochs Graphics Adapter (BGA):** Direct port communication to set the video resolution to `1024x768x32bpp` (True Color) through ports `0x01CE`/`0x01CF`.
-*   **PS/2 Physical Mouse Driver:** Custom data-cycle state machine tracking mouse movements with packets of 3 bytes, stabilized with byte synchronization checks.
-*   **Interactive Desktop & Apps:** 
-    *   **File Explorer:** Dynamic paths and folder navigation.
-    *   **Notepad:** Interactive text editor with real-time keyboard mapping and saving back to the virtual hard drive.
-    *   **Genesis Paint:** Scaled canvas (64x64) allowing physical mouse drawing and persistence.
-    *   **Real-time CMOS Clock:** Independent floating clock widget reading hours, minutes, and seconds directly from the motherboard.
-
----
-
 Check the Page for more Projects!
 
 ## 📜 License
