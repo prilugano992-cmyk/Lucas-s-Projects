@@ -1,6 +1,0 @@
-default 0
-timeout 0
-
-title GenesisOS
-kernel /boot/genesis_kernel.bin
-module /boot/initrd.tar
