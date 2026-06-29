@@ -6,395 +6,496 @@
     <title>Lucas · Projects</title>
     <style>
         :root {
+            /* Cores Globais */
             --bg: #0d1117;
             --card: #161b22;
             --border: #30363d;
-            --text: #e6edf3;
-            --accent: #58a6ff;
-            --green: #7ee787;
-            --purple: #d2a8ff;
-            --aero-btn: #2ecc71;
-            --aero-btn-border: #82e0aa;
+            --text: #c9d1d9;
+            --text-heading: #e6edf3;
+            --text-muted: #8b949e;
+            
+            /* Cores Temáticas dos Projetos */
+            --genesis-color: #58a6ff;
+            --sweetie-color: #ff69b4;
+            --cleanair-color: #2ecc71;
+            --tiny-color: #d29922;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: 'Segoe UI', 'SF Mono', 'Cascadia Code', monospace;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
             line-height: 1.6;
             padding: 2rem;
+            -webkit-font-smoothing: antialiased;
         }
-        .container { max-width: 1000px; margin: 0 auto; }
+        
+        .container { 
+            max-width: 950px; 
+            margin: 0 auto; 
+        }
+        
+        /* HEADER & NAVEGAÇÃO */
         header {
             text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--border);
         }
-        header h1 { font-weight: 300; font-size: 2.5rem; letter-spacing: 2px; }
-        header p { color: #8b949e; margin-top: 0.5rem; }
-        .links { margin-top: 1rem; }
-        .links a {
-            color: var(--accent);
-            text-decoration: none;
-            margin: 0 1rem;
-            font-weight: 500;
+        
+        header h1 { 
+            font-weight: 600; 
+            font-size: 2.8rem; 
+            color: var(--text-heading);
+            letter-spacing: -0.5px;
         }
-        .links a:hover { text-decoration: underline; }
-
+        
+        header p { 
+            color: var(--text-muted); 
+            margin-top: 0.5rem; 
+            font-size: 1.1rem;
+        }
+        
         .tabs {
             display: flex;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             border-bottom: 1px solid var(--border);
-            padding-bottom: 0.5rem;
+            padding-bottom: 0;
             flex-wrap: wrap;
+            justify-content: center;
         }
+        
         .tab {
             background: transparent;
-            color: #8b949e;
-            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border: 1px solid transparent;
             border-bottom: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px 6px 0 0;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px 8px 0 0;
             cursor: pointer;
             font-family: inherit;
-            font-size: 0.9rem;
-            transition: 0.2s;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            bottom: -1px;
         }
-        .tab.active { background: var(--card); color: var(--text); border-color: var(--border); }
-        .tab:hover:not(.active) { color: var(--text); }
+        
+        .tab.active { 
+            background: var(--card); 
+            color: var(--text-heading); 
+            border-color: var(--border); 
+            border-bottom-color: var(--card);
+        }
+        
+        .tab:hover:not(.active) { 
+            color: var(--text-heading); 
+            background: rgba(255, 255, 255, 0.05);
+        }
 
-        .project-panel { display: none; }
+        .project-panel { 
+            display: none; 
+            animation: fadeIn 0.4s ease-out; 
+        }
         .project-panel.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
+        /* CARDS GERAIS */
         .card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
+            border-radius: 12px;
+            padding: 2rem;
             margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .card h2 { font-weight: 400; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
-        .badge { background: #238636; color: white; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.8rem; }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card h2, .card h3 { 
+            color: var(--text-heading);
+            font-weight: 600; 
+            margin-bottom: 1rem; 
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+        }
 
-        /* Estilo Frutiger Aero para o botão de Download */
+        /* TEMÁTICAS ESPECÍFICAS DOS CARDS */
+        .genesis-theme {
+            border-top: 4px solid var(--genesis-color);
+            background: linear-gradient(180deg, rgba(88, 166, 255, 0.03) 0%, var(--card) 100%);
+        }
+        
+        .sweetie-theme {
+            border-top: 4px solid var(--sweetie-color);
+            background: linear-gradient(180deg, rgba(255, 105, 180, 0.05) 0%, var(--card) 100%);
+        }
+
+        .cleanair-theme {
+            border-top: 4px solid var(--cleanair-color);
+            background: linear-gradient(180deg, rgba(46, 204, 113, 0.05) 0%, var(--card) 100%);
+        }
+
+        .tiny-theme {
+            border-top: 4px solid var(--tiny-color);
+            background: linear-gradient(180deg, rgba(210, 153, 34, 0.05) 0%, var(--card) 100%);
+        }
+
+        /* BADGES & BOTÕES */
+        .badge { 
+            color: #ffffff; 
+            padding: 0.25rem 0.75rem; 
+            border-radius: 2em; 
+            font-size: 0.75rem; 
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .badge-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(255, 105, 180, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0); }
+        }
+
         .btn-download {
-            display: inline-block;
-            background: var(--aero-btn);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #238636;
             color: #ffffff;
-            padding: 0.6rem 1.4rem;
-            border-radius: 6px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
             text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-top: 1rem;
-            transition: background 0.2s, box-shadow 0.2s;
-            border: 1px solid var(--aero-btn-border);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-top: 1.5rem;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(240, 246, 252, 0.1);
         }
+        
         .btn-download:hover {
-            background: #27ae60;
-            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.4);
+            background: #2ea043;
+            transform: scale(1.02);
         }
 
-        pre {
-            background: #0d1117;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 1rem;
-            overflow-x: auto;
-            max-height: 500px;
-            font-size: 0.75rem;
-            line-height: 1.4;
+        /* GENESIS - FUN FACTS */
+        .fun-facts {
+            background: rgba(88, 166, 255, 0.05);
+            border-left: 4px solid var(--genesis-color);
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
         }
-        code { color: var(--purple); }
-        .license { color: #8b949e; font-size: 0.85rem; margin-top: 0.5rem; }
-        .ps-badge { background: #012456; color: #ffffff; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.8rem; }
+        .fun-facts h4 { color: var(--genesis-color); margin-bottom: 0.5rem; font-size: 0.95rem; text-transform: uppercase; }
+        .fun-facts ul { padding-left: 1.2rem; color: var(--text-muted); font-size: 0.95rem; }
+
+        /* SWEETIE - FEATURE GRID */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .feature-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-heading);
+            border-left: 3px solid var(--sweetie-color);
+            transition: background 0.2s;
+        }
+        .feature-item:hover { background: rgba(255, 105, 180, 0.1); }
+
+        /* CLEANAIR - MINIMAL LIST */
+        .clean-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        .clean-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-heading);
+        }
+        .clean-list li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: var(--cleanair-color);
+        }
+
+        /* POWERSHELL WINDOW STYLING (TINY PROJECTS) */
+        .ps-window {
+            background: #012456;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #444;
+        }
+        .ps-header {
+            background: #eeeeee;
+            color: #000;
+            padding: 5px 15px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ps-controls span {
+            display: inline-block;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            margin-left: 6px;
+        }
+        .ps-controls .close { background: #ff5f56; }
+        .ps-controls .min { background: #ffbd2e; }
+        .ps-controls .max { background: #27c93f; }
+        
+        .ps-window pre {
+            background: transparent;
+            border: none;
+            margin: 0;
+            padding: 1.5rem;
+            color: #cccccc;
+            font-family: 'Consolas', 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* CÓDIGO GERAL */
+        pre {
+            background: #090c10;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            overflow-x: auto;
+            font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 1rem 0;
+        }
+        code { font-family: inherit; }
+        
+        .license { 
+            color: var(--text-muted); 
+            font-size: 0.85rem; 
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
 
         .footer {
             text-align: center;
-            margin-top: 2rem;
-            padding-top: 1rem;
+            margin-top: 4rem;
+            padding-top: 2rem;
             border-top: 1px solid var(--border);
-            color: #8b949e;
-            font-size: 0.85rem;
-        }
-        @media (max-width: 600px) {
-            body { padding: 1rem; }
-            header h1 { font-size: 1.8rem; }
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
 <div class="container">
-
     <header>
         <h1>Lucas Prado Coelho</h1>
         <p>Operating systems, alternative interfaces, and low‑level experiments.</p>
-        <div class="links">
-            <a href="https://github.com/prilugano992-cmyk">GitHub</a>
-            <a href="#genesis">GenesisOS 2.0</a>
-            <a href="#sweetie">Sweetie Assistant</a>
-            <a href="#cleanair">CleanAir Browser</a>
-            <a href="#tiny">Really Small Projects</a>
-        </div>
     </header>
 
     <div class="tabs">
         <button class="tab active" onclick="openProject('genesis')">GenesisOS 2.0</button>
         <button class="tab" onclick="openProject('sweetie')">Sweetie Assistant</button>
         <button class="tab" onclick="openProject('cleanair')">CleanAir Browser</button>
-        <button class="tab" onclick="openProject('tiny')">Really Small Projects</button>
+        <button class="tab" onclick="openProject('tiny')">Micro Projects</button>
     </div>
 
     <div id="genesis" class="project-panel active">
-        <div class="card">
-            <h2>GenesisOS <span class="badge" style="background:#58a6ff;">2.0</span></h2>
-            <p>The Second Version of GenesisOS! Includes new features and More!</p>
+        <div class="card genesis-theme">
+            <h2>GenesisOS <span class="badge" style="background:var(--genesis-color);">2.0</span></h2>
+            <p><strong>GenesisOS 2.0</strong> is a Bare-metal Operating System made for daily use and weak computers, while also having a big overhaul from the first version.</p>
+            
+            <div class="fun-facts">
+                <h4>Fun Facts</h4>
+                <ul>
+                    <li>The name "Genesis" references the first chapter of the Bible, marking the beginning of my career.</li>
+                    <li>GenesisOS was originally supposed to be called "Journey OS" and started out as a Linux distro.</li>
+                </ul>
+            </div>
             
             <a href="https://github.com/prilugano992-cmyk/Lucas-s-Projects/releases/download/v2.0.0/genesis2.iso" download="genesis2.iso" class="btn-download">
-                Download GenesisOS 2 ISO
+                ⬇ Download ISO (v2.0)
             </a>
-            
-            <p style="margin-top:1rem; color:#8b949e;">MIT License · Bare-metal C & x86 Assembly codebase.</p>
+            <p style="margin-top:1rem; color:var(--text-muted); font-size: 0.85rem;">MIT License · Bare-metal C & x86 Assembly</p>
         </div>
 
         <div class="card">
             <h3>Kernel Core (VFS & ATA Sector Read)</h3>
-            <pre><code>// Dynamic filesystem table synchronizing memory (RAM) with disk sectors (LBA1)
+            <pre><code style="color: #d2a8ff;">// Dynamic filesystem table synchronizing memory (RAM) with disk sectors (LBA1)
+
 void ata_read_sector(unsigned int lba, unsigned short* buffer) {
     while ((inb(0x1F7) & 0x80) != 0); // Wait until drive is ready
-
-    outb(0x1F6, (0xE0 | ((lba >> 24) & 0x0F))); 
-    outb(0x1F2, 1);                             
-    outb(0x1F3, (unsigned char)lba);            
-    outb(0x1F4, (unsigned char)(lba >> 8));     
-    outb(0x1F5, (unsigned char)(lba >> 16));    
-    outb(0x1F7, 0x20); // ATA LBA28 Read Sectors Command
-
-    // Wait for the drive sector buffer to fill up
-    while ((inb(0x1F7) & 0x80) != 0);           
-    while ((inb(0x1F7) & 0x08) == 0);           
-
-    for (int i = 0; i < 256; i++) {
-        buffer[i] = inw(0x1F0);
-    }
-}
-
-// Redraws desktop, rounded windows, and clocks on top of the double buffer
-void redraw_screen(unsigned int* fb, int screen_width, int screen_height, int win_open, int st_menu_open, int mouse_x, int mouse_y) {
-    draw_desktop_background(screen_width, screen_height, aero_color_mode);
     
-    for (int i = 0; i < 4; i++) {
-        draw_dock(&docks[i], aero_color_mode);
+    outb(0x1F6, (0xE0 | ((lba >> 24) & 0x0F)));   
+    outb(0x1F2, 1);                               
+    outb(0x1F3, (unsigned char)lba);              
+    outb(0x1F4, (unsigned char)(lba >> 8));       
+    outb(0x1F5, (unsigned char)(lba >> 16));      
+    outb(0x1F7, 0x20); // ATA LBA28 Read Sectors Command  
+    
+    // Wait for the drive sector buffer to fill up  
+    while ((inb(0x1F7) & 0x80) != 0);             
+    while ((inb(0x1F7) & 0x08) == 0);             
+    
+    for (int i = 0; i < 256; i++) {  
+        buffer[i] = inw(0x1F0);  
     }
-
-    if (win_open) {
-        draw_aero_window(window_x, window_y, window_width, window_height, "GENESIS OS 1.0", aero_color_mode);
-    }
-
-    draw_cursor(mouse_x, mouse_y);
-
-    // Blit (fast copy) full buffer block to memory-mapped framebuffer
-    for (int i = 0; i < screen_width * screen_height; i++) {
-        fb[i] = backbuffer[i];
-    }
-}
-</code></pre>
-            <p class="license">MIT License — Copyright (c) 2026 LucasPR</p>
+}</code></pre>
         </div>
     </div>
 
     <div id="sweetie" class="project-panel">
-        <div class="card">
+        <div class="card sweetie-theme">
             <h2>
-                Sweetie Assistant
-                <span class="badge" style="background:#ff69b4;">
-                    DESKTOP PET
-                </span>
+                Sweetie Assistant  
+                <span class="badge badge-pulse" style="background:var(--sweetie-color);">Desktop Pet</span>
             </h2>
 
-            <p>
-                Sweetie Assistant is a desktop companion built with Python and
-                PyQt6. It lives on the user's desktop as a mascot,
-                capable of reacting to application launches, displaying animated
-                speech bubbles, searching Wikipedia, telling jokes, reporting
-                system information, and interacting through a contextual menu.
-            </p>
+            <p>Sweetie Assistant is a desktop companion built with Python and PyQt6. It lives on the user's desktop as a mascot, capable of reacting to application launches, displaying animated speech bubbles, and interacting through a contextual menu.</p>
 
-            <p style="margin-top:1rem; color:#8b949e;">
-                Python · PyQt6 · Requests · Psutil
-            </p>
-
-            <a href="https://github.com/prilugano992-cmyk/Lucas-s-Projects/releases/download/sweetie-v1.0.0/SweetieAssistant.exe"
-               class="btn-download"
-               download>
-                Download Sweetie Assistant
+            <a href="https://github.com/prilugano992-cmyk/Lucas-s-Projects/releases/download/sweetie-v1.0.0/SweetieAssistant.exe" class="btn-download" style="background:var(--sweetie-color); border-color:var(--sweetie-color);" download>
+                ♥ Download Sweetie
             </a>
         </div>
 
         <div class="card">
-            <h3>Features</h3>
-            <ul style="padding-left:20px;">
-                <li>Transparent desktop mascot</li>
-                <li>Always-on-top companion</li>
-                <li>Animated typewriter dialogue</li>
-                <li>Wikipedia integration</li>
-                <li>Application launch detection</li>
-                <li>System information utility</li>
-                <li>Random jokes and facts</li>
-                <li>Interactive context menu</li>
-                <li>Built with Python and PyQt6</li>
-            </ul>
+            <h3>Interactive Features</h3>
+            <div class="feature-grid">
+                <div class="feature-item">🪟 Transparent Mascot UI</div>
+                <div class="feature-item">💬 Animated Typewriter Dialogue</div>
+                <div class="feature-item">📚 Wikipedia API Integration</div>
+                <div class="feature-item">🚀 App Launch Detection</div>
+                <div class="feature-item">💻 System Info Utility</div>
+                <div class="feature-item">🃏 Random Jokes & Facts</div>
+            </div>
         </div>
 
         <div class="card">
-            <h3>Wikipedia Search Example</h3>
-<pre><code>def wikipedia_search(self):
-    text, ok = QInputDialog.getText(
-        self,
-        "Wikipedia Search",
-        "What should I explain?"
-    )
-
-    if not ok or not text:
-        return
-
-    search_url = (
-        "https://en.wikipedia.org/w/api.php"
-        "?action=opensearch"
-        "&limit=1"
-        "&format=json"
-        f"&search={text}"
-    )
-
-    search_data = requests.get(
-        search_url,
-        timeout=10
-    ).json()
-
-    page_title = search_data[1][0]
-
-    summary_url = (
-        "https://en.wikipedia.org/api/rest_v1/page/summary/"
-        + page_title.replace(" ", "_")
-    )
-
-    summary = requests.get(
-        summary_url,
-        timeout=10
-    ).json()
-
-    self.say(summary["extract"][:350])
-</code></pre>
-            <p class="license">
-                MIT License — Copyright (c) 2026 Lucas Prado Coelho
-            </p>
+            <h3>Wikipedia Integration Core</h3>
+            <pre><code style="color: #ff7b72;">def wikipedia_search(self):  
+    text, ok = QInputDialog.getText(self, "Wikipedia Search", "What should I explain?")  
+    if not ok or not text: return  
+  
+    search_url = f"https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&format=json&search={text}"  
+    search_data = requests.get(search_url, timeout=10).json()  
+    
+    if search_data[1]:
+        page_title = search_data[1][0]  
+        summary_url = "https://en.wikipedia.org/api/rest_v1/page/summary/" + page_title.replace(" ", "_")  
+        summary = requests.get(summary_url, timeout=10).json()  
+        self.say(summary["extract"][:350])</code></pre>
         </div>
     </div>
 
     <div id="cleanair" class="project-panel">
-        <div class="card">
-            <h2>CleanAir Browser <span class="badge" style="background:#2ecc71;">HOBBY PROJECT</span></h2>
-            <p>A simple, lightweight web browser built as a hobby project. Focused on a clean, distraction-free environment and standard rendering without resource bloating. Perfect for testing web view implementations and light daily browsing experiments.</p>
+        <div class="card cleanair-theme">
+            <h2>CleanAir Browser <span class="badge" style="background:var(--cleanair-color); color:#000;">Experimental</span></h2>
+            <p>A simple, lightweight web browser built as a hobby project. Focused on a clean, distraction-free environment and standard rendering without resource bloating. Perfect for testing web view implementations.</p>
             
-            <a href="https://github.com/prilugano992-cmyk/Lucas-s-Projects/releases/download/cleanair-v1.0.0/CleanAir.exe" class="btn-download" download>
-                Download CleanAir Browser
+            <a href="https://github.com/prilugano992-cmyk/Lucas-s-Projects/releases/download/cleanair-v1.0.0/CleanAir.exe" class="btn-download" style="background:var(--cleanair-color); color:#000;" download>
+                🍃 Download CleanAir
             </a>
-            
-            <p style="margin-top:1rem; color:#8b949e;">Hobby Project · Desktop Windows Application.</p>
         </div>
         
         <div class="card">
-            <h3>Features</h3>
-            <ul style="padding-left:20px;">
-                <li>Minimalist user interface</li>
-                <li>Lightweight</li>
-                <li>No telemetry or tracking components</li>
-                <li>Dedicated to experimental features and custom UI components</li>
+            <h3>Design Philosophy</h3>
+            <ul class="clean-list">
+                <li><strong>Absolute Minimalism:</strong> UI gets out of your way to focus entirely on content.</li>
+                <li><strong>Featherweight:</strong> Extremely low memory footprint compared to modern chromium browsers.</li>
+                <li><strong>Zero Telemetry:</strong> No tracking, no background pinging, completely private.</li>
+                <li><strong>Custom Components:</strong> Built to serve as a sandbox for experimental native UI elements.</li>
             </ul>
         </div>
     </div>
 
     <div id="tiny" class="project-panel">
-        <div class="card">
-            <h2>Really Small Projects <span class="badge" style="background:#c9510c;">Micro</span></h2>
-            <p>A collection of tiny, self‑contained tools born from curiosity. Each fulfills a single purpose with minimal code.</p>
+        <div class="card tiny-theme">
+            <h2>Really Small Projects <span class="badge" style="background:var(--tiny-color); color:#000;">Micro</span></h2>
+            <p>A collection of tiny, self‑contained tools born from curiosity. Each fulfills a single purpose with minimal code, relying on native system tools without requiring complex setups.</p>
         </div>
 
         <div class="card">
-            <h3>WikiSearch <span class="ps-badge">PowerShell</span></h3>
-            <p>A terminal‑based Wikipedia browser. Type a term and get the article summary instantly. If the exact term isn't found, it searches for the closest match using Wikipedia's API.</p>
-            <p style="margin-top:0.5rem; font-size:0.9rem; color:#8b949e;">Runs on any Windows machine with PowerShell — no extra installation required.</p>
-            <pre><code>while ($true) {
-    $query = Read-Host "Search For a Term (or 'Exit')"
-    if ($query -eq "exit") { break }
-
-    Write-Host "`nSearching For '$query'..." -ForegroundColor Cyan
-
-    try {
-        $encodedQuery = [uri]::EscapeDataString($query)
-        # Uses REST API v1 to get the main page summary
-        $url = "https://en.wikipedia.org/api/rest_v1/page/summary/$encodedQuery"
-        $response = Invoke-RestMethod -Uri $url -Method Get -ErrorAction Stop
-
-        Write-Host "`n===== RESULT =====" -ForegroundColor Green
-        Write-Host "`n--- $($response.title) ---" -ForegroundColor Yellow
-        Write-Host $response.extract
-        Write-Host "`n====================="
+            <h3>WikiSearch Tool</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1rem;">A terminal‑based Wikipedia browser built entirely in PowerShell. Type a term and get the article summary instantly.</p>
+            
+            <div class="ps-window">
+                <div class="ps-header">
+                    <span>Administrator: Windows PowerShell</span>
+                    <div class="ps-controls">
+                        <span class="min"></span>
+                        <span class="max"></span>
+                        <span class="close"></span>
+                    </div>
+                </div>
+                <pre><code style="color: #569cd6;">while</code> <code style="color: #cccccc;">($true) {  
+    </code><code style="color: #9cdcfe;">$query</code> <code style="color: #cccccc;">= Read-Host "Search For a Term (or 'Exit')"  
+    </code><code style="color: #c586c0;">if</code> <code style="color: #cccccc;">(</code><code style="color: #9cdcfe;">$query</code> <code style="color: #cccccc;">-eq "exit") { </code><code style="color: #c586c0;">break</code> <code style="color: #cccccc;">}  
+    
+    Write-Host "`nSearching For '</code><code style="color: #9cdcfe;">$query</code><code style="color: #cccccc;">'..." -ForegroundColor Cyan  
+    
+    </code><code style="color: #c586c0;">try</code> <code style="color: #cccccc;">{  
+        </code><code style="color: #9cdcfe;">$encodedQuery</code> <code style="color: #cccccc;">= [uri]::EscapeDataString(</code><code style="color: #9cdcfe;">$query</code><code style="color: #cccccc;">)  
+        </code><code style="color: #9cdcfe;">$url</code> <code style="color: #cccccc;">= "https://en.wikipedia.org/api/rest_v1/page/summary/</code><code style="color: #9cdcfe;">$encodedQuery</code><code style="color: #cccccc;">"  
+        </code><code style="color: #9cdcfe;">$response</code> <code style="color: #cccccc;">= Invoke-RestMethod -Uri </code><code style="color: #9cdcfe;">$url</code> <code style="color: #cccccc;">-Method Get -ErrorAction Stop  
+    
+        Write-Host "`n===== RESULT =====" -ForegroundColor Green  
+        Write-Host "`n--- $(</code><code style="color: #9cdcfe;">$response</code><code style="color: #cccccc;">.title) ---" -ForegroundColor Yellow  
+        Write-Host </code><code style="color: #9cdcfe;">$response</code><code style="color: #cccccc;">.extract  
+    }  
+    </code><code style="color: #c586c0;">catch</code> <code style="color: #cccccc;">{  
+        Write-Host "Trying opensearch fallback..." -ForegroundColor DarkGray
+        <span style="color: #6a9955;"># Fallback logic omitted for brevity...</span>
     }
-    catch {
-        # If it fails (e.g., page not found), try opensearch and pick the first result
-        try {
-            $urlSearch = "https://en.wikipedia.org/w/api.php?action=opensearch&amp;format=json&amp;search=$encodedQuery&amp;limit=1"
-            $searchResponse = Invoke-RestMethod -Uri $urlSearch -Method Get
-            $firstResult = $searchResponse[1][0]
-            if ($firstResult) {
-                $encodedFirst = [uri]::EscapeDataString($firstResult)
-                $urlSummary = "https://en.wikipedia.org/api/rest_v1/page/summary/$encodedFirst"
-                $summary = Invoke-RestMethod -Uri $urlSummary -Method Get -ErrorAction SilentlyContinue
-                if ($summary) {
-                    Write-Host "`nClosest Term: $firstResult" -ForegroundColor Magenta
-                    Write-Host "`n===== RESULT =====" -ForegroundColor Green
-                    Write-Host "`n--- $($summary.title) ---" -ForegroundColor Yellow
-                    Write-Host $summary.extract
-                    Write-Host "`n====================="
-                } else {
-                    Write-Host "Nothing Found." -ForegroundColor Red
-                }
-            } else {
-                Write-Host "Nothing Found." -ForegroundColor Red
-            }
-        }
-        catch {
-            Write-Host "Error to ask API: $_" -ForegroundColor Red
-        }
-    }
-}
-</code></pre>
+}</code></pre>
+            </div>
         </div>
     </div>
 
     <div class="footer">
-        © 2026 LucasPR · Built with C, GNU toolchain, PowerShell and endless curiosity.
+        © 2026 Lucas Prado Coelho · Built with C, GNU toolchain, PowerShell and endless curiosity.
     </div>
 </div>
 
 <script>
     function openProject(name) {
-        // Esconde todos os painéis
-        document.querySelectorAll('.project-panel').forEach(p => {
-            p.classList.remove('active');
-        });
-        // Remove 'active' de todas as abas
-        document.querySelectorAll('.tab').forEach(t => {
-            t.classList.remove('active');
-        });
-        // Mostra o painel escolhido
+        document.querySelectorAll('.project-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        
         const panel = document.getElementById(name);
         if (panel) panel.classList.add('active');
-        // Ativa a aba correspondente
+        
         const activeTab = document.querySelector(`.tab[onclick*="${name}"]`);
         if (activeTab) activeTab.classList.add('active');
     }
