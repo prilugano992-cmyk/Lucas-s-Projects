@@ -19,6 +19,7 @@
             --sweetie-color: #ff69b4;
             --cleanair-color: #2ecc71;
             --tiny-color: #d29922;
+            --upcoming-color: #a371f7;
         }
         
         * { 
@@ -155,6 +156,25 @@
         .tiny-theme {
             border-top: 4px solid var(--tiny-color);
             background: linear-gradient(180deg, rgba(210, 153, 34, 0.05) 0%, var(--card) 100%);
+        }
+
+        .upcoming-theme {
+            border-top: 4px solid var(--upcoming-color);
+            background: linear-gradient(180deg, rgba(163, 113, 247, 0.03) 0%, var(--card) 100%);
+        }
+
+        /* AVISO */
+        .disclaimer-box {
+            background: rgba(210, 153, 34, 0.1);
+            border: 1px solid var(--tiny-color);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            color: #f0e6d2;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         /* BADGES & BOTÕES */
@@ -330,6 +350,7 @@
         <button class="tab" onclick="openProject('sweetie')">Sweetie Assistant</button>
         <button class="tab" onclick="openProject('cleanair')">CleanAir Browser</button>
         <button class="tab" onclick="openProject('tiny')">Micro Projects</button>
+        <button class="tab" onclick="openProject('upcoming')">Upcoming Projects</button>
     </div>
 
     <div id="genesis" class="project-panel active">
@@ -462,14 +483,14 @@ void ata_read_sector(unsigned int lba, unsigned short* buffer) {
                 <pre><code style="color: #569cd6;">while</code> <code style="color: #cccccc;">($true) {  
     </code><code style="color: #9cdcfe;">$query</code> <code style="color: #cccccc;">= Read-Host "Search For a Term (or 'Exit')"  
     </code><code style="color: #c586c0;">if</code> <code style="color: #cccccc;">(</code><code style="color: #9cdcfe;">$query</code> <code style="color: #cccccc;">-eq "exit") { </code><code style="color: #c586c0;">break</code> <code style="color: #cccccc;">}  
-    
+      
     Write-Host "`nSearching For '</code><code style="color: #9cdcfe;">$query</code><code style="color: #cccccc;">'..." -ForegroundColor Cyan  
-    
+      
     </code><code style="color: #c586c0;">try</code> <code style="color: #cccccc;">{  
         </code><code style="color: #9cdcfe;">$encodedQuery</code> <code style="color: #cccccc;">= [uri]::EscapeDataString(</code><code style="color: #9cdcfe;">$query</code><code style="color: #cccccc;">)  
         </code><code style="color: #9cdcfe;">$url</code> <code style="color: #cccccc;">= "https://en.wikipedia.org/api/rest_v1/page/summary/</code><code style="color: #9cdcfe;">$encodedQuery</code><code style="color: #cccccc;">"  
         </code><code style="color: #9cdcfe;">$response</code> <code style="color: #cccccc;">= Invoke-RestMethod -Uri </code><code style="color: #9cdcfe;">$url</code> <code style="color: #cccccc;">-Method Get -ErrorAction Stop  
-    
+      
         Write-Host "`n===== RESULT =====" -ForegroundColor Green  
         Write-Host "`n--- $(</code><code style="color: #9cdcfe;">$response</code><code style="color: #cccccc;">.title) ---" -ForegroundColor Yellow  
         Write-Host </code><code style="color: #9cdcfe;">$response</code><code style="color: #cccccc;">.extract  
@@ -480,6 +501,22 @@ void ata_read_sector(unsigned int lba, unsigned short* buffer) {
     }
 }</code></pre>
             </div>
+        </div>
+    </div>
+
+    <div id="upcoming" class="project-panel">
+        <div class="disclaimer-box">
+            ⚠️ <strong>Notice:</strong> These projects are mostly just plans and might not be the same as the final product.
+        </div>
+
+        <div class="card upcoming-theme">
+            <h2>Genesis Phone <span class="badge" style="background:var(--upcoming-color);">Concept</span></h2>
+            <p>An innovative mobile phone that comes with the integrated <strong>GenesisMobileOS</strong>. Developed with an absolute focus on lightness, hardware optimization, and extremely affordable cost, making fluid technology available to everyone.</p>
+        </div>
+
+        <div class="card upcoming-theme">
+            <h2>AstroLooker <span class="badge" style="background:var(--upcoming-color);">Hardware Plan</span></h2>
+            <p>A revolutionary alternative interface device for telescopes. It operates similarly to a tablet, connected to a rotating antenna equipped with a smart camera capable of automatically centering, capturing high-exposure photos, and accurately recording celestial objects.</p>
         </div>
     </div>
 
