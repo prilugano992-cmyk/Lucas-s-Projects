@@ -17,7 +17,7 @@
             /* Cores Temáticas dos Projetos */
             --genesis-color: #58a6ff;
             --sweetie-color: #ff69b4;
-            --cleanair-color: #2ecc71;
+            --ecomap-color: #2ecc71; /* Substituído cleanair por ecomap */
             --tiny-color: #d29922;
             --upcoming-color: #a371f7;
         }
@@ -148,8 +148,8 @@
             background: linear-gradient(180deg, rgba(255, 105, 180, 0.05) 0%, var(--card) 100%);
         }
 
-        .cleanair-theme {
-            border-top: 4px solid var(--cleanair-color);
+        .ecomap-theme { /* Substituído de cleanair-theme */
+            border-top: 4px solid var(--ecomap-color);
             background: linear-gradient(180deg, rgba(46, 204, 113, 0.05) 0%, var(--card) 100%);
         }
 
@@ -249,22 +249,22 @@
         }
         .feature-item:hover { background: rgba(255, 105, 180, 0.1); }
 
-        /* CLEANAIR - MINIMAL LIST */
-        .clean-list {
+        /* ECOMAP - MINIMAL LIST */
+        .eco-list {
             list-style: none;
             margin-top: 1rem;
         }
-        .clean-list li {
+        .eco-list li {
             position: relative;
             padding-left: 1.5rem;
             margin-bottom: 0.8rem;
             color: var(--text-heading);
         }
-        .clean-list li::before {
+        .eco-list li::before {
             content: "✦";
             position: absolute;
             left: 0;
-            color: var(--cleanair-color);
+            color: var(--ecomap-color);
         }
 
         /* POWERSHELL WINDOW STYLING (TINY PROJECTS) */
@@ -348,7 +348,7 @@
     <div class="tabs">
         <button class="tab active" onclick="openProject('genesis')">GenesisOS 2.0</button>
         <button class="tab" onclick="openProject('sweetie')">Sweetie Assistant</button>
-        <button class="tab" onclick="openProject('cleanair')">CleanAir Browser</button>
+        <button class="tab" onclick="openProject('ecomap')">EcoMap</button>
         <button class="tab" onclick="openProject('tiny')">Micro Projects</button>
         <button class="tab" onclick="openProject('upcoming')">Upcoming Projects</button>
     </div>
@@ -440,23 +440,22 @@ void ata_read_sector(unsigned int lba, unsigned short* buffer) {
         </div>
     </div>
 
-    <div id="cleanair" class="project-panel">
-        <div class="card cleanair-theme">
-            <h2>CleanAir Browser <span class="badge" style="background:var(--cleanair-color); color:#000;">Experimental</span></h2>
-            <p>A simple, lightweight web browser built as a hobby project. Focused on a clean, distraction-free environment and standard rendering without resource bloating. Perfect for testing web view implementations.</p>
+    <div id="ecomap" class="project-panel">
+        <div class="card ecomap-theme">
+            <h2>EcoMap <span class="badge" style="background:var(--ecomap-color); color:#000;">Web</span></h2>
+            <p>A collaborative environmental platform where you can post your complaints about climate change causes on a map.</p>
             
-            <a href="https://github.com/prilugano992-cmyk/Lucas-s-Projects/releases/download/cleanair-v1.0.0/CleanAir.exe" class="btn-download" style="background:var(--cleanair-color); color:#000;" download>
-                🍃 Download CleanAir
+            <a href="https://ecomap-e7268.web.app/" target="_blank" rel="noopener noreferrer" class="btn-download" style="background:var(--ecomap-color); color:#000;">
+                🌍 Access EcoMap
             </a>
         </div>
         
         <div class="card">
-            <h3>Design Philosophy</h3>
-            <ul class="clean-list">
-                <li><strong>Absolute Minimalism:</strong> UI gets out of your way to focus entirely on content.</li>
-                <li><strong>Featherweight:</strong> Extremely low memory footprint compared to modern chromium browsers.</li>
-                <li><strong>Zero Telemetry:</strong> No tracking, no background pinging, completely private.</li>
-                <li><strong>Custom Components:</strong> Built to serve as a sandbox for experimental native UI elements.</li>
+            <h3>Platform Resources</h3>
+            <ul class="eco-list">
+                <li><strong>All Reports Mapped:</strong> Visualize and record environmental issues in real time through geolocated tags.</li>
+                <li><strong>Collaborative Action:</strong> Engage the community to report incidents and promote improvements in your region.</li>
+                <li><strong>Universal Access:</strong> A responsive web platform accessible from any device directly through the browser.</li>
             </ul>
         </div>
     </div>
